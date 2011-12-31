@@ -1,0 +1,31 @@
+!!! Strict
+%html(lang="en" xmlns="http://www.w3.org/1999/xhtml")
+  %head
+    %meta(http-equiv="content-type" content="text/html; charset=UTF-8")
+    %title #{(title ? title + " - " : "")}Node.js on Windows Azure
+    %meta(name="description" content="All about Node.js on Windows Azure.")
+    %link(href="/volcano.css?v2" rel="stylesheet")
+    %link(href="/print.css" rel="stylesheet" media="print")
+    %link(rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/feed.xml")
+    %link(href="/favicon.ico" rel="icon" type="image/x-icon")
+  %body
+    #container
+      #header
+        %a{href: "/"}
+          %h1
+            Node on Azure
+          %h2.tagline
+            the node turned azure
+      = content
+      
+      #footer.clearfix
+        %p Site Design and code is &copy; 2012 to Matias Woloski under the MIT license. Content and articles are copyrighted to the individual authors. All code snippets used in the examples are in the public domain.
+        %p Wheat running on node #{process.version}
+    :script
+      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    :script
+      try {
+      var pageTracker = _gat._getTracker("UA-28020770-1");
+      pageTracker._trackPageview();
+      } catch(err) {}
