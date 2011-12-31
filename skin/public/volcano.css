@@ -48,6 +48,7 @@ body {
   text-align: center;
   color: #fff;
   font-family: sans-serif;
+  color: #555;
   padding: 20px 0;
 }
 #footer.clearfix{
@@ -176,7 +177,6 @@ body {
 #main h3,
 #main h4,
 #main h5 {
-  font-family: sans-serif;
   margin: .5em 0;
 }
 #main h1 {
