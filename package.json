@@ -1,12 +1,12 @@
 {
-  "author": "Tim Caswell <tim@creationix.com> (http://creationix.com/)",
-  "name": "howtonode.org",
-  "description": "The popular blog howto.no.de",
+  "author": "Matias Woloski <woloski@sion.com> (http://blogs.southworks.net/mwoloski)",
+  "name": "Node on Azure blog",
+  "description": "Node on Azure blog",
   "version": "0.0.0",
-  "homepage": "http://howto.no.de/",
+  "homepage": "http://nodeonazure.org/",
   "repository": {
     "type": "git",
-    "url": "git://github.com/creationix/howtonode.org.git"
+    "url": "git://github.com/woloski/nodeonazure-blog.git"
   },
   "engines": {
     "node": ">=0.4.0"
