@@ -6,10 +6,9 @@ var Stack = require('stack'),
 
 
 var port = process.env.port || 1337;
-var gitRepoPath = process.env.gitrepopath || __dirname;
+var gitRepoPath = process.env.gitrepoblogpath || __dirname;
 
-console.log(port);
-console.log('ssss');
+console.log('');
 	
 Http.createServer(Stack(
   Creationix.log(),
@@ -17,8 +16,12 @@ Http.createServer(Stack(
   require('wheat')(gitRepoPath)
   )).listen(port);
 
+console.log('running on port:' + port);
+console.log('git repo path:' + gitRepoPath);
+
+
 function handleGitHook(req, res, next) {
-	if (req.method == 'GET' && req.url == '/hook') {
+	if (req.method == 'POST' && req.url == '/hook') {
   		gitExec(['--git-dir=' + gitRepoPath, 'fetch'], 'utf8', function (err, text) {
     		if (err) {
     			console.log(err);
