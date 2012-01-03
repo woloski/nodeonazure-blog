@@ -7,8 +7,6 @@ var Stack = require('stack'),
 
 var port = process.env.port || 1337;
 var gitRepoPath = process.env.gitrepoblogpath || __dirname;
-
-console.log('');
 	
 Http.createServer(Stack(
   Creationix.log(),
