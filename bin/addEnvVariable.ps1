@@ -1,0 +1,1 @@
+New-ItemProperty -Name $args[0] -value $args[1] -path $args[2] -PropertyType String
