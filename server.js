@@ -6,30 +6,35 @@ var Stack = require('stack'),
 
 
 var port = process.env.port || 1337;
+var gitRepoPath = process.env.gitrepopath || __dirname;
+
 console.log(port);
-console.log('sssss');
+console.log('ssss');
 	
 Http.createServer(Stack(
   Creationix.log(),
-  function handler(req, res, next) {
-  // Either handle the request here using `req` and `res`
-  // or call `next()` to pass control to next layer
-  // any exceptions need to be caught and forwarded to `next(err)`
-   if (req.method == 'GET' && req.url == '/hook') {
-  		gitExec(['pull'], 'utf8', function (err, text) {
-    		res.writeHead(200);
-   			res.end('sds');
-  		});
-   		
-   		res.writeHead(200);
-   		res.end('OK');
-   }
-   else 
-   		next();
-  },
-  require('wheat')(process.env.JOYENT ? process.env.HOME + "/howtonode" : __dirname)
+  handleGitHook,
+  require('wheat')(gitRepoPath)
   )).listen(port);
 
+function handleGitHook(req, res, next) {
+	if (req.method == 'GET' && req.url == '/hook') {
+  		gitExec(['--git-dir=' + gitRepoPath, 'fetch'], 'utf8', function (err, text) {
+    		if (err) {
+    			console.log(err);
+    			res.writeHead(500);
+   				res.end(err);
+    		} else {
+    			console.log(text);
+    			res.writeHead(200);
+   				res.end('OK');	
+    		}
+  		});
+   }
+   else {
+		next();   	
+   }	
+}
 
 function gitExec(commands, encoding, callback) {
   var child = ChildProcess.spawn("git", commands);
