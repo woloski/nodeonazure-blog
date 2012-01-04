@@ -1,6 +1,6 @@
-### About nodeonazure.cloudapp.net
+### About nodeblog.cloudapp.net
 
-nodeonazure.cloudapp.net is a community supported blog that is focused on running node on Windows Azure. Expect to find here anything related to that. 
+nodeblog.cloudapp.net is a community supported blog that is focused on running node on Windows Azure. Expect to find here anything related to that. 
 
 This site is powered by [Wheat][], a git based blogging engine written in [node.JS][] and runs on an extra-small instance of [Windows Azure][].
 
