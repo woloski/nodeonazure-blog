@@ -1,8 +1,9 @@
 cd /d "%~dp0"
 
+if "%EMULATED%"=="true" exit /b 0
+
 echo LOG > setup_git_log.txt
 
-REM SET EMULATED="true"
 REM SET GITPATH=C:\Resources\directory\git\
 REM SET GITREPOBLOGPATH=C:\Resources\directory\blog\
 REM SET GITREPOURL=git://github.com/woloski/nodeonazure-blog.git
@@ -11,7 +12,6 @@ REM remove trailing slash if any
 IF %GITPATH:~-1%==\ SET GITPATH=%GITPATH:~0,-1%
 IF %GITREPOBLOGPATH:~-1%==\ SET GITREPOBLOGPATH=%GITREPOBLOGPATH:~0,-1%
 
-echo EMULATED= %EMULATED% 1>> setup_git_log.txt
 echo GITPATH= %GITPATH% 1>> setup_git_log.txt
 echo GITREPOBLOGPATH= %GITREPOBLOGPATH% 1>> setup_git_log.txt
 echo GITREPOURL= %GITREPOURL% 1>> setup_git_log.txt
