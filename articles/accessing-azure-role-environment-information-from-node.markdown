@@ -88,4 +88,4 @@ And finally, below is the server.js file that writes the results in the response
 
 This is the result you get if you deploy the sample:
 
-![Alt text](/accessing-azure-role-environment-information-from-node/deployed-sample-task.png "Results in the cloud")
+![Alt text](articles/accessing-azure-role-environment-information-from-node/deployed-sample-task.png "Results in the cloud")
