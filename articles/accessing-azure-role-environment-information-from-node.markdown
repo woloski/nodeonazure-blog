@@ -1,5 +1,5 @@
 Title: Accessing Azure Role Environment information from NodeJS
-Author: Mariano Vazquez 
+Author: Mariano Vazquez
 Date: Tue Jan 05 2012 10:32:35 GMT-0300
 Node: v0.6.6
 
