@@ -89,4 +89,4 @@ http.createServer(function (req, res) {
 
 This is the result you get if you deploy the sample:
 
-![Alt text](/accessing-azure-role-environment-information-from-node/deployedSampleTask.png "deployment results")
+![Alt text](/accessing-azure-role-environment-information-from-node/deployed-sample-task.png "Results in the cloud")
