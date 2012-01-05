@@ -28,9 +28,10 @@ echo y| cacls "%GITPATH%" /grant everyone:f /t 1>> setup_git_log.txt 2>> setup_g
 echo y| cacls "%GITREPOBLOGPATH%" /grant everyone:f /t 1>> setup_git_log.txt 2>> setup_git_log_error.txt
 
 REM add GITREPOBLOGPATH as a system env variable to be used by node
-powershell "& .\addEnvVariable.ps1 GITREPOBLOGPATH %GITREPOBLOGPATH% 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment'" 1>> setup_git_log.txt 2>> setup_git_log_error.txt
+powershell "[Environment]::SetEnvironmentVariable('GITREPOBLOGPATH', '%GITREPOBLOGPATH%', 'Machine')" 1>> setup_git_log.txt 2>> setup_git_log_error.txt 
 
-echo y| cacls "%GITREPOBLOGPATH%" /grant everyone:f /t 1>> setup_git_log.txt 2>> setup_git_log_error.txt
+IISRESET  1>> setup_git_log.txt 2>> setup_git_log_error.txt 
+NET START W3SVC 1>> setup_git_log.txt 2>> setup_git_log_error.txt 
 
 echo SUCCESS
 exit /b 0
