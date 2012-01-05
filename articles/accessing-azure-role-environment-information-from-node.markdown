@@ -13,7 +13,7 @@ In small words, you need to:
 
 1. Create a startup task to launch a `cmd` script that access the Azure Role environment info.
 2. Set the info in Environment variables so it can be accessed from NodeJS.
-3. Obtain the values in the server.js file via the *process.env* objet.
+3. Obtain the values in the *server.js* file via the *process.env* objet.
 
 So let's get into it. The `cmd` script looks like this:
 
@@ -44,11 +44,11 @@ So let's get into it. The `cmd` script looks like this:
 
 Some things to mention about this code:
 
-* To execute an unsigned `ps` script in Azure you have to set the *Execution Policy* to *Unrestricted*. I'm using the *Set-ExecutionPolicy* command for this, but take into account that this won't change **unless** you do it manually. In PS 2.0 you can use the *-ExecutionPolicy* command to set to unrestricted only for the current scope. But since the default template uses *osFamily="1"* that came with PS 1.0, I decided to leave it this way ([smarx](http://blog.smarx.com/posts/windows-azure-startup-tasks-tips-tricks-and-gotchas) wrote something about this)
+* To execute an unsigned `ps` script in Azure you have to set the **Execution Policy** to **Unrestricted**. I'm using the **Set-ExecutionPolicy** command for this, but take into account that this value won't change unless you do it manually. In PS 2.0 you can use the **-ExecutionPolicy** command to set to **unrestricted** only for the current scope. But since the default WebRole template uses **osFamily="1"** that came with PS 1.0, I decided to leave it this way ([smarx](http://blog.smarx.com/posts/windows-azure-startup-tasks-tips-tricks-and-gotchas) wrote something about this)
 * After the Environment variables are set, you need to restart IIS so the changes take effect in the service.
-* Lasty, if you deploy this sample in Azure, you will need to restart the *w3svc* service manually
+* Lasty, if you deploy this sample in Azure, you will need to restart the w3svc service manually
 
-Now let's dig into the ´PS´ script.
+Now let's dig into the `ps` script.
 
 **set_azure_role_information.ps1**
 
@@ -59,7 +59,7 @@ Now let's dig into the ´PS´ script.
 	[Environment]::SetEnvironmentVariable("IsAvailable", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::IsAvailable, "Machine") 
 	[Environment]::SetEnvironmentVariable("CustomVariable", "Some value", "Machine")
 
-What I'm doing is setting some RoleEnvironment properties in Environment variables. Notice that you can also set a custom variable if you want.
+What I'm doing is setting some Environment variables with RoleEnvironment property values. Notice that you can also set a custom variable, if you want.
 
 This is the Startup task that puts everything into motion.
 
