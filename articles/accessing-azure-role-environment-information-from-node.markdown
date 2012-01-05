@@ -71,10 +71,10 @@ And finally, below is the server.js file that writes the results in the response
 
 **server.js**
 
-var http = require('http');
-var port = process.env.port || 1337;
+	var http = require('http');
+	var port = process.env.port || 1337;
 
-http.createServer(function (req, res) {
+	http.createServer(function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     
 	res.write("Role Name: " + process.env.RoleName + "\n");
@@ -84,7 +84,7 @@ http.createServer(function (req, res) {
 	res.write("Custom variable: " + process.env.CustomVariable + "\n");
 	
 	res.end();
-}).listen(port);
+	}).listen(port);
 
 This is the result you get if you deploy the sample:
 
