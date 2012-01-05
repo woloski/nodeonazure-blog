@@ -59,7 +59,7 @@ Now let's dig into the ´PS´ script.
 	[Environment]::SetEnvironmentVariable("IsAvailable", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::IsAvailable, "Machine") 
 	[Environment]::SetEnvironmentVariable("CustomVariable", "Some value", "Machine")
 
-What I'm doing is setting some RoleEnvironment properties in Environment variables. Simple enough. Notice that you can also set a custom variable there if you want.
+What I'm doing is setting some RoleEnvironment properties in Environment variables. Notice that you can also set a custom variable if you want.
 
 This is the Startup task that puts everything into motion.
 
