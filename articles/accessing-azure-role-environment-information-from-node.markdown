@@ -32,7 +32,6 @@ So let's get into it. The `cmd` script looks like this:
 	ECHO Setting the Environment variables..
 	CALL %powerShellDir%\powershell.exe -Command Set-ExecutionPolicy unrestricted
 	CALL %powerShellDir%\powershell.exe -Command "& .\set_azure_role_information.ps1"
-	CALL %powerShellDir%\powershell.exe -Command Set-ExecutionPolicy restricted
 	ECHO Done!
 
 	ECHO Restarting IIS..
@@ -45,7 +44,7 @@ So let's get into it. The `cmd` script looks like this:
 
 Some things to mention about this code:
 
-* To execute an unsigned `ps` script in Azure you have to set the *Execution Policy* to *Unrestricted*. I'm using the *Set-ExecutionPolicy* command for this, but take into account that this won't change unless you do it manually. In PS 2.0 you can use the *-ExecutionPolicy* command to set to unrestricted only for the current scope. But since the default template uses *osFamily="1"* that came with PS 1.0, I decided to leave this way ([smarx](http://blog.smarx.com/posts/windows-azure-startup-tasks-tips-tricks-and-gotchas) wrote something about this)
+* To execute an unsigned `ps` script in Azure you have to set the *Execution Policy* to *Unrestricted*. I'm using the *Set-ExecutionPolicy* command for this, but take into account that this won't change **unless** you do it manually. In PS 2.0 you can use the *-ExecutionPolicy* command to set to unrestricted only for the current scope. But since the default template uses *osFamily="1"* that came with PS 1.0, I decided to leave it this way ([smarx](http://blog.smarx.com/posts/windows-azure-startup-tasks-tips-tricks-and-gotchas) wrote something about this)
 * After the Environment variables are set, you need to restart IIS so the changes take effect in the service.
 * Lasty, if you deploy this sample in Azure, you will need to restart the *w3svc* service manually
 
