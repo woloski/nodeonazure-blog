@@ -210,7 +210,7 @@ var Data = module.exports = {
     var props;
     Step(
       function getArticleMarkdown() {
-        Git.readFile(version, Path.join("articles", name + ".markdown"), this);
+        Git.readFile(version, "articles/" + name + ".markdown", this);
       },
       function (err, markdown) {
         if (err) { callback(err); return; }
@@ -288,7 +288,7 @@ var Data = module.exports = {
           callback(new Error("name is required"));
           return;
         }
-        Git.readFile(version, Path.join("authors", name + ".markdown"), this);
+        Git.readFile(version, "authors/" + name + ".markdown", this);
       },
       function process(err, markdown) {
         if (err) { callback(err); return; }
