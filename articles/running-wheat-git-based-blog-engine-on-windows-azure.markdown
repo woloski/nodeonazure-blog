@@ -11,7 +11,7 @@ In this article I will go through the details of setting up a blog on top of [wh
 4. Deploy it to Azure
 5. Setting up the hook
 
-### How [wheat][] works?
+## How [wheat][] works?
 
 [wheat][] is a blog engine based on git and was written by [creationix][]. The articles exists on a [github repository](http://github.com/woloski/nodeonazure-blog) and there is a bare repository running on the [Windows Azure](http://windows.azure.com) VM that gets updated everytime we push to github. So the actual files are not in Windows Azure. [Wheat][] will execute git commands against the bare repository to take data out from that bare repo (`git log`, `git show`, etc.). 
 
