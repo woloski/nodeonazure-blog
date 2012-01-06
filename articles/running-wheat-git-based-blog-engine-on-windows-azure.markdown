@@ -1,6 +1,6 @@
 Title: Running wheat git-based blog engine on Windows Azure 
 Author: Matias Woloski
-Date: Tue Jan 02 2012 12:10:35 GMT-0300
+Date: Tue Jan 06 2012 12:10:35 GMT-0300
 Node: v0.6.6
 
 In this article I will go through the details of setting up a blog on top of [wheat][] and run it on Windows Azure.
