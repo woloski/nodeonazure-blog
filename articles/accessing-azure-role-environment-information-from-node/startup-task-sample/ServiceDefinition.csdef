@@ -3,14 +3,7 @@
   <WebRole name="StartupTaskSample.Web" vmsize="ExtraSmall">
     <Imports />
     <Startup>
-      <Task commandLine="setup_web.cmd" executionContext="elevated">
-        <Environment>
-          <Variable name="EMULATED">
-            <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
-          </Variable>
-	     </Environment>
-      </Task>
-	  <Task commandLine="setup_environment_variables.cmd" executionContext="elevated" taskType="simple" />
+      <Task commandLine="setup_environment_variables.cmd" executionContext="elevated" taskType="simple" />
     </Startup>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="80" />

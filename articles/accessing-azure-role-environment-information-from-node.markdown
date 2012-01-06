@@ -86,6 +86,6 @@ And finally, below is the server.js file that writes the results in the response
 	res.end();
 	}).listen(port);
 
-This is the result you get if you deploy the sample:
+This is the result you get if you run the sample in the emulator:
 
-![Alt text](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/accessing-azure-role-environment-information-from-node/deployed-sample-task.png?raw=true "Results in the cloud")
+![Alt text](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/accessing-azure-role-environment-information-from-node/test-sample-task.png?raw=true "Showing the Azure Role Information")
