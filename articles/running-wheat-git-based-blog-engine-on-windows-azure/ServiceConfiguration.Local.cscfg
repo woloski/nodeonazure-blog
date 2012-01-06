@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ServiceConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" serviceName="nodeonazureblog" osFamily="2" osVersion="*" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration">
+  <Role name="nodeonazure-blog">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="admin" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBvgYJKoZIhvcNAQcDoIIBrzCCAasCAQAxggFvMIIBawIBADBTMD8xPTA7BgNVBAMMNFdpbmRvd3MoUikgQXp1cmUoVE0pIEVuY3J5cHRpb24gVG9vbCB2ZXJzaW9uIDEuNi4wLjACEHlNhXggcyedQUxwNvnMoYowDQYJKoZIhvcNAQEBBQAEggEAiCW4TbFa2/fVCnsWkECBvNqZX+Jgkz+Lf2PqNwO2HYPPeRDeQL4GAIPWdr6vGg65WVaorYPGShNIcHq0sVaifn6pWaEuTcfg3pl7eccUb2TJVty+meSqfRbPFy0/MDixDVVgLfEbmVGuceZ1t6OCQ6Sw81e4oxXYjumnmcr1zYxb6L2+5PV+a3ZBiPf4ei1Fz44XlaAWGJ0EGMgRIiWSHcNBywlUqYa5awUJ3gjOqd81WcGpddXvdxSLsNG1SO4Y3ujGMY0+nOgG3Z/HTuJU3Cn0Q/wumBhJsjaV51q0JhLWcm74+EtsizeLhRP6OSpt8t3qdU0WZFW2mzZ6T0GlJDAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECKec43GFsptYgBCNHa+gWmjnMY3G400YCIcN" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2012-12-30T13:50:12.1716184-03:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+    </ConfigurationSettings>
+    <Instances count="1" />
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="96EB0A6D42A722EAE996275D638A1027E7BF2C80" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>
