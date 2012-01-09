@@ -1,92 +1,95 @@
-Title: Windows Azure Startup task to run npm install to avoid deploying node modules  
-Author: Matias Woloski
-Date: Tue Jan 03 2012 02:24:35 GMT-0300
+Title: Running socket.io on Windows Azure Web and Worker roles
+Author: Mariano Vazquez
+Date: Mon Jan 09 2012 11:30:01 GMT-0300
 Node: v0.6.6
 
-Deploying to Windows Azure is a lengthy task (scottgu are you listening?) and you don't want to make it even slower by uploading a package with all the node modules inside. Last week while talking to [Johnny](http://johnny.io) we were wondering why Azure is not doing `npm install` and reading the package.json by default.
- 
-It turns out that there is a [heated debate](http://www.mikealrogers.com/posts/nodemodules-in-git.html) apparentely in the node community about whether or not pushing node_modules to the source control is a good idea. My take is: if you wire up your dependencies against fixed versions (instead of latest or greater than) you are safe. So if you think the same, this is a small tutorial of how to configure an Azure role to do the magic. I took many interesting snippets from the great [Steve Marx](http://smarx.com) blog.
+While setting up your Node.js server, you may notice that Windows Azure provides two different flavors to host your applications, Web and Worker roles.
 
-## How to
+ Which one you choose depends solely on your own requirements and needs (web roles are the best choice to host web applications, while worker roles are suited for long-running, asynchronous processes).
 
-The process consists basically of: 
+In this article I'm going to show you how to configure a Node.js server using both approaches. I'm starting from the basic 'Hello World' template created by the [Windows Azure Powershell for Node.js cmdlets](https://www.windowsazure.com/en-us/develop/nodejs/), with the proper modifications to send the messages via socket.io. Also, I've created a client application that opens a connection to the server (either in a web or a worker role) and shows the messages received from it.
 
-1. creating a `cmd` that downloads `npm` (not installed in the Azure VM by default) and unzip it to the `bin` folder where `node.exe` is. 
-2. add the `package.json` with your dependencies on the role root
-3. configure the startup task in the `ServiceDefinition.csdef`
+## The client
 
-The batch that you will run from the startup task looks like this:
+Below is the javascript code of hte client. Notice that I clean the label every time I click the button. This way you can tell how much it takes the whole process to complete.
 
-**install_modules.cmd**
+	<script type="text/javascript">
+        var socket;
+        $(document).ready(function () {
+            $("#startButton").click(function () {
+                $("#returnMessageLabel").empty();
+                if (!socket) {
+                    socket = io.connect("http://localhost:81/");
+                    socket.on('helloBack', function (data) {
+                        $("#returnMessageLabel").text(data.message);
+                    });
+                }
+                socket.emit('sendMessage', { message: 'Hello there!' });
+            });
+        });  
+    </script>
 
-	cd /d "%~dp0"
+Now, let's see the server code.
 
-	if "%EMULATED%"=="true" exit /b 0
+## Running on a Windows Azure Worker role
 
-	echo npm LOG > npmlog.txt
+The worker role approach is pretty straightforward. You just need to install the socket.io module on the role and replace the code in the server.js file with the following.
 
-	powershell -c "set-executionpolicy unrestricted"
-	powershell .\download.ps1 "http://npmjs.org/dist/npm-1.1.0-beta-7.zip"
 
-	7za x npm-1.1.0-beta-7.zip -y 1>> npmlog.txt 2>> npmlog_error.txt
-	cd ..
-	bin\npm install 1>> npmlog.txt 2>> npmlog_error.txt
+**server.js**
 
-	echo SUCCESS
-	exit /b 0
+	var port = process.env.port || 81;
 
-	:error
+	var app = require('http').createServer(handler)
+	  , io = require('socket.io').listen(app)
 
-	echo FAILED
-	exit /b -1
+	app.listen(port);
+	console.log('socket.io server started on port: ' + port + '\n');
 
-There are a couple things worth mentioning
-
-* We are downloading `npm` instead of including it in the package. Again, the lighter the better. 
-* This will run in the context of the `bin` folder. I haven't found a way to execute npm on the parent folder, so I had to do `cd..`.
-* We are redirecting the stdout and stderr to `npmlog.txt` and `npmlogerror.txt`. This is crucial in startup tasks if something goes wrong and you want to troubleshoot them by RD to the instance (`Enable-RemoteDesktop` PowerShell CmdLet saves you lots of time, so you should do it as soon as you did `New-AzureService`).
-* If we are running in the Windows Azure emulator, we don't want this process to happen. We will have our modules already installed.
-
-This is the `download.ps1`.
-
-**download.ps1**
-
-	$url = $args[0];
-
-	function download([string]$url) {
-	    $dest = $url.substring($url.lastindexof('/')+1)
-	    if (!(test-path $dest)) {
-	        (new-object system.net.webclient).downloadfile($url, $dest);
-	    }
+	function handler (req, res) {
+	  res.writeHead(200);
+	  res.end('socket.io server started on port: ' + port + '\n');
 	}
 
-	download $url
+	io.sockets.on('connection', function (socket) {
+	  console.log('user connected');
+	  
+	  socket.on('sendMessage', function(data){
+		console.log('user sent the message: ' + data.message + '\n');
+		socket.emit('helloBack', { message: 'Hello back!' });
+	  });
+	});
 
-And you can use [7za](http://www.7-zip.org/download.html) to unzip or write your own unzipping function with PowerShell (thanks [Lito](http://twitter.com/litodam)!)
+If you run both client and server you will get the following result.
 
-	function Extract-Zip
-	{
-		param([string]$zipfilename, [string] $destination)
+![Alt text](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/client-on-worker.png?raw=true "Hello World sample using Worker Role as Server")
 
-		if(test-path($zipfilename))
-		{             
-            $shellApplication = new-object -com shell.application
-            $zipPackage = $shellApplication.NameSpace($zipfilename)
-            $destinationFolder = $shellApplication.NameSpace($destination)
-            $destinationFolder.CopyHere($zipPackage.Items())
-		}
-	}
+> Note: if you want to deploy the app, I recommend you follow [this](http://nodeblog.cloudapp.net/startup-task-to-run-npm-in-azure) approach to install npm and avoid deploying node modules.
 
-Finally, you will have to add the startup task to the `ServiceDefinition.csdef`
+## Running on a Windows Azure Web role
 
-**ServiceDefinition.csdef**
+If you use this approach you need to disable Web Sockets. This is because web roles run in a pre-configured IIS7, and IIS doesn't support web sockets yet. 
 
-	<Task commandLine="install_nodemodules.cmd" executionContext="elevated">
-	    <Environment>
-	      <Variable name="EMULATED">
-	        <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
-	      </Variable>
-	    </Environment>
-	</Task>
+You just need to override the transport mechanism to use ´xhr-polling´ with a 10 sec polling duration, no matter which client tries to connect to the server. Replace the server.js file with the same code you used for the worker role, but add the following lines at the end of the file:
 
-And that's it! enjoy traveling light :)
+*server.js*
+
+	io.configure(function () { 
+	  io.set("transports", ["xhr-polling"]); 
+	  io.set("polling duration", 10); 
+	});
+
+You can leave it as it is, although you will experience some initial delay in Chrome or FF, because they will try to use Web Sockets as first option, and then degrade to the next transport method. Other approach could be setting an array of allowed methods, like the following:
+
+*server.js*
+
+	io.configure(function () { 
+	  io.set('transports', [
+	  	'xhr-polling'
+	  , 'jsonp-polling'
+	  , 'htmlfile'
+	  ]);
+	  io.set("polling duration", 10); 
+	});
+
+
