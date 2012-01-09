@@ -2,7 +2,7 @@ var Git = require('git-fs'),
     Path = require('path'),
     Step = require('step'),
     util = require(process.binding('natives').util ? 'util' : 'sys'),
-    Script = process.binding('evals').Script,
+    Script = require('vm'),
     QueryString = require('querystring');
 
 function preProcessMarkdown(markdown) {
@@ -23,9 +23,9 @@ function preProcessMarkdown(markdown) {
 
   // Look for snippet placeholders
   var unique = props.uniqueSnippets = {};
-  props.snippets = (markdown.match(/\n<[^<>:\s]+\.[a-z]{2,4}(\*|[#].+)?>\n/g) || []).map(
+  props.snippets = (markdown.match(/(\r\n|\n)<[^<>:\s]+\.[a-z]{2,4}(\*|[#].+)?>(\r\n|\n)/g) || []).map(
     function (original) {
-      var path = original.substr(2, original.length - 4);
+      var path = original.slice(original.indexOf("<")+1, original.indexOf(">"));
 
       var filename = path;
       execute = path[path.length - 1] === "*";
@@ -156,6 +156,7 @@ var Data = module.exports = {
 
   // Loads a snippet of code for inclusion in a page
   snippet: Git.safe(function snippet(version, path, callback) {
+    
     var name, filename, execute, base, url, beforeCode, result;
     function error(err) {
       callback(null, {
@@ -247,7 +248,7 @@ var Data = module.exports = {
       function getBase() {
         Data.article(version, name, this);
       },
-      function loadExtras(err, props) {
+      function loadExtras(err, props) { 
         if (err) { callback(err); return; }
         article = props;
         Data.articles(version, this.parallel());

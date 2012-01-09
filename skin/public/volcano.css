@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0 10px;
   font-family: "Segoe UI","HelveticaNeue",Garuda,Arial,sans-serif;
-  background: #bbb;
+  background: #A7CAF2;
 }
 #container {
   max-width: 1200px;
@@ -84,7 +84,6 @@ body {
   margin: 0 0 -12px 0;
 }
 #main img {
-  float: left;
   margin: 0 10px 10px 0;
 }
 #main hr {

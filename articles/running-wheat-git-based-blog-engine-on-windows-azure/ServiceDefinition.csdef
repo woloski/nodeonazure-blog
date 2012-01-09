@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<ServiceDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="nodeonazureblog" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <WebRole name="nodeonazure-blog" vmsize="ExtraSmall">
+    <Imports>
+      <Import moduleName="RemoteForwarder" />
+      <Import moduleName="RemoteAccess" />
+    </Imports>
+    <Startup>
+      <Task commandLine="setup_web.cmd" executionContext="elevated">
+        <Environment>
+          <Variable name="EMULATED">
+            <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
+          </Variable>
+        </Environment>
+      </Task>
+      <Task commandLine="setup_git.cmd" executionContext="elevated">
+        <Environment>
+          <Variable name="EMULATED">
+            <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
+          </Variable>
+          <Variable name="GITPATH">
+            <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/LocalResources/LocalResource[@name='Git']/@path" />
+          </Variable>
+          <Variable name="GITREPOBLOGPATH">
+            <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/LocalResources/LocalResource[@name='GitRepoBlogPath']/@path" />
+          </Variable>
+          <Variable name="GITREPOURL" value="git://github.com/woloski/nodeonazure-blog.git" />
+        </Environment>
+      </Task>
+      <Task commandLine="install_nodemodules.cmd" executionContext="elevated">
+        <Environment>
+          <Variable name="EMULATED">
+            <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
+          </Variable>
+        </Environment>
+      </Task>
+      <Task commandLine="patch_wheatmodule.cmd" executionContext="elevated">
+        <Environment>
+          <Variable name="EMULATED">
+            <RoleInstanceValue xpath="/RoleEnvironment/Deployment/@emulated" />
+          </Variable>
+        </Environment>
+      </Task>
+    </Startup>
+    <LocalResources>
+      <LocalStorage name="GitRepoBlogPath" sizeInMB="1000" />
+      <LocalStorage name="Git" sizeInMB="1000" />
+    </LocalResources>
+    <Endpoints>
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
+    </Endpoints>
+    <Sites>
+      <Site name="Web">
+        <Bindings>
+          <Binding name="Endpoint1" endpointName="Endpoint1" />
+        </Bindings>
+      </Site>
+    </Sites>
+  </WebRole>
+</ServiceDefinition>
