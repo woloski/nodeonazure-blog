@@ -21,12 +21,17 @@
         </footer>
     </div>
     <script type="text/javascript">
+        var socket;
         $(document).ready(function () {
             $("#startButton").click(function () {
-                var socket = io.connect("http://localhost:81/");
-                socket.on('sayHello', function (data) {
-                    $("#returnMessageLabel").text(data.message);
-                });
+                $("#returnMessageLabel").empty();
+                if (!socket) {
+                    socket = io.connect("http://localhost:81/");
+                    socket.on('helloBack', function (data) {
+                        $("#returnMessageLabel").text(data.message);
+                    });
+                }
+                socket.emit('sendMessage', { message: 'Hello there!' });
             });
         });  
     </script>
