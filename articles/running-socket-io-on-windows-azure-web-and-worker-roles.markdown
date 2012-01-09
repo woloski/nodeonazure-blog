@@ -62,10 +62,12 @@ The worker role approach is fairly straightforward. You just need to install the
 
 If you run both client and server you will get the following result.
 
-![Alt text](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/client-on-worker.png?raw=true "Hello World sample using Worker Role as Server")
+![](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/client-on-worker.png?raw=true "Hello World sample using Worker Role as Server")
 
-
+* * *
 > Note: if you want to deploy the app, I recommend you follow [this](http://nodeblog.cloudapp.net/startup-task-to-run-npm-in-azure) approach to install npm to avoid deploying node modules.
+* * *
+
 
 ## Running on a Windows Azure Web role
 
