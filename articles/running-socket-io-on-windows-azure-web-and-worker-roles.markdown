@@ -71,7 +71,7 @@ If you run both client and server you will get the following result.
 
 If you use this approach you need to disable Web Sockets. This is because Web roles run in a pre-configured IIS7, and IIS doesn't support web sockets yet. 
 
-You just need to override the transport mechanism to use, for instance,`xhr-polling` with a 10 sec. polling duration. No matter which client tries to connect to the server, this will be the transport method used. Replace the server.js file with the same code you used for in the worker role approach, but add the following lines at the end of the file:
+You just need to override the transport mechanism to use, for instance, `xhr-polling` with a 10 sec. polling duration. No matter which client tries to connect to the server, this will be the transport method used. Replace the server.js file with the same code you used for in the worker role approach, but add the following lines at the end of the file:
 
 **server.js**
 
@@ -96,7 +96,7 @@ If you don't add the lines above you will experience some initial delay in brows
 ## Conclusion
 
 * You can use nearly the same code in your server.js file in a Web and a Worker role.
-* If you use a Web Role, remember to disable Web Sockets, as IIS currently doesn't support this transpor method.
+* If you use a Web Role, remember to disable Web Sockets, as IIS currently doesn't support this transport method.
 * You can use a single transport method for all clients, or an array of supported methods.
 
 
