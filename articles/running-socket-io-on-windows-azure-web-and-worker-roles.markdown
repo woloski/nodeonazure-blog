@@ -74,6 +74,7 @@ You just need to override the transport mechanism to use, for instance, `xhr-pol
 
 **server.js**
 
+	...
 	io.configure(function () { 
 	  io.set("transports", ["xhr-polling"]); 
 	  io.set("polling duration", 10); 
