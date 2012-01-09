@@ -63,7 +63,6 @@ The worker role approach is fairly straightforward. You just need to install the
 If you run both client and server you will get the following result.
 
 ![](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/client-on-worker.png?raw=true "Hello World sample using Worker Role as Server")
-<br><br><br><br><br><br><br><br><br><br>
 
 
 ## Running on a Windows Azure Web role
