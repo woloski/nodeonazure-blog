@@ -71,7 +71,7 @@ We deployed this to an extra small instance on Windows Azure and tested it with 
 
 ![](/running-socket-io-on-windows-azure-web-and-worker-roles/chrome-client-worker.png)
 
-Since Internet Explorer 9 does not have support for `WebSockets` (IE10 will), it will *degrage* the connection to `xhr-polling`. By default, [socket.io][] is configured to use the following transports (in this order): *websocket*, *htmlfile*, *xhr-polling* and *jsonp-polling*
+Since Internet Explorer 9 does not have support for `WebSockets` (IE10 will), it will *degrade* the connection to `xhr-polling`. By default, [socket.io][] is configured to use the following transports (in this order): *websocket*, *htmlfile*, *xhr-polling* and *jsonp-polling*
 
 ## Running on a Windows Azure Web role
 
