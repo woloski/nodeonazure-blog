@@ -7,7 +7,7 @@ In this article, we are going to show you how to configure a Node.js + `socket.i
 
 Both approaches work with nearly the same code (with a minor tweak to disable Web Sockets in Web roles), which leads the decision on what to choose depending solely on your own requirements and needs.
 
-You start from the basic 'Hello World' template created by the [Windows Azure Powershell for Node.js cmdlets](https://www.windowsazure.com/en-us/develop/nodejs/) to develop both roles, with the proper modifications to send messages via `socket.io`. We have created a [client](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/client.zip) application you can use to test that everything is in place; it simply opens a connection to the server (either a Web or a Worker role) and shows the messages it receives.
+You start from the basic 'Hello World' template created by the [Windows Azure Powershell for Node.js cmdlets](https://www.windowsazure.com/en-us/develop/nodejs/) to develop both roles, with the proper modifications to send messages via `socket.io`. We have created a [client](https://github.com/woloski/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/client.zip) application you can use to test that everything is in place; it simply opens a connection to the server (either a Web or a Worker role) and shows the messages it receives.
 
 ## The Client code
 
@@ -32,7 +32,7 @@ Remember to specify the server URL and port.
 
 You should expect to receive this result:
 
-![](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/client-result.png?raw=true)
+![](https://github.com/woloski/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/client-result.png?raw=true)
 
 Now, let's implement the server code.
 
@@ -67,9 +67,9 @@ The Worker role approach is fairly straightforward. You just need to install the
 
 We deployed the server in Azure and tested it with IE and Chrome. One thing to notice is that IE doesn't support `Web Sockets`, while Chrome does, so it will *degrade* to `xhr-polling` (by default, `socket.io` is configured to use the following transport methods: *websocket*, *htmlfile*, *xhr-polling* and *jsonp-polling*).
  
-![](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/ie-client-worker.png?raw=true)
+![](https://github.com/woloski/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/ie-client-worker.png?raw=true)
 
-![](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/chrome-client-worker.png?raw=true)
+![](https://github.com/woloski/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/chrome-client-worker.png?raw=true)
 
 
 ## Running on a Windows Azure Web role
@@ -88,7 +88,7 @@ Replace the server.js file with the same code you used for in the worker role ap
 
 If you don't add this fix, you will experience some initial delay in browsers that support Web Sockets (like Chrome). That delay is generated because they will try to use Web Sockets as first option, and when it fails, connect with the next transport method in the list.
 
-![](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/chrome-client-webrole.png?raw=true)
+![](https://github.com/woloski/nodeonazure-blog/blob/master/articles/running-socket-io-on-windows-azure-web-and-worker-roles/chrome-client-webrole.png?raw=true)
 
 Alternatively, you could configure an array of allowed methods (instead of one), using the following code:
 
