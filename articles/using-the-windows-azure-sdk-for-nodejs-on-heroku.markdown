@@ -1,7 +1,7 @@
 Title: Using the Windows Azure SDK for Node.js on Heroku
 Author: Juan Pablo Garcia
 Date: Wed Jan 11 2012 02:24:35 GMT-0300
-Node: v0.6.6
+Node: v0.4.7
 
 Getting the [Windows Azure SDK for Noje.js](https://github.com/WindowsAzure/azure-sdk-for-Node) running on [Heroku](http://www.heroku.com/) wasn't as easy as we thought, in this article we're going to show you how we can workaround the [Heroku](http://www.heroku.com/) limitation and how to create a simple application that leverages the SDK for listing blob containers. 
 
