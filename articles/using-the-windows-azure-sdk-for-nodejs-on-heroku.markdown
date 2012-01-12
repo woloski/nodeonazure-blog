@@ -1,6 +1,6 @@
 Title: Using the Windows Azure SDK for Node.js on Heroku
 Author: Juan Pablo Garcia
-Date: Tue Jan 03 2012 02:24:35 GMT-0300
+Date: Wed Jan 11 2012 02:24:35 GMT-0300
 Node: v0.6.6
 
 Getting the [Windows Azure SDK for Noje.js](https://github.com/WindowsAzure/azure-sdk-for-Node) running on [Heroku](http://www.heroku.com/) wasn't as easy as we thought, in this article we're going to show you how we can workaround the [Heroku](http://www.heroku.com/) limitation and how to create a simple application that leverages the SDK for listing blob containers. 
@@ -8,6 +8,8 @@ Getting the [Windows Azure SDK for Noje.js](https://github.com/WindowsAzure/azur
 ## The limitation
 
 As you may know, to get a Node.js application running on [Heroku](http://www.heroku.com/) you need to configure the application to use the Cedar stack as [described here](http://devcenter.heroku.com/articles/node-js). One of the prerequisites is that your application must run on `v0.4.7` but sadly the [Windows Azure SDK for Noje.js](https://github.com/WindowsAzure/azure-sdk-for-Node) npm package requires `>= 0.6.4` as defined in its [package.json](https://github.com/WindowsAzure/azure-sdk-for-node/blob/master/package.json) file, so when [Heroku](http://www.heroku.com/) tries to perform the deployment it fails because of this npm dependency.
+
+We [created an issue on the Github site azure-sdk-for-node](https://github.com/WindowsAzure/azure-sdk-for-node/issues/29) and the team will be changing it soon apparentely. If that's the case, then go straight to the Creating the application section.
 
 ## Workaround 1
 
@@ -32,7 +34,7 @@ The npm `azure-0.4.7` package is public, so instead of the using the official `a
 
 ## Workaround 2
 
-There is a [Running Your Own Node.js Version on Heroku ](http://blog.superpat.com/2011/11/15/running-your-own-node-js-version-on-heroku/) blog post that describes how to deploy a custom version of Node.js. We didn't use this approach but it should work.
+There is a [Running Your Own Node.js Version on Heroku](http://blog.superpat.com/2011/11/15/running-your-own-node-js-version-on-heroku/) blog post that describes how to deploy a custom version of Node.js. We didn't use this approach but it should work.
 
 ## Creating the application
 
