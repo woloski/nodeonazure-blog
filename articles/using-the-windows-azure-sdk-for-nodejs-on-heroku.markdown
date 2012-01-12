@@ -93,8 +93,8 @@ We'll use the [express](http://expressjs.com/) npm package to create the applica
 
 	* If you are running Node.js on **MacOS**, from a console:
 		
-			exports WAZ_STORAGE_ACCOUNT_NAME=accountname
-			exports WAZ_STORAGE_ACCESS_KEY=accountkey
+			export WAZ_STORAGE_ACCOUNT_NAME=accountname
+			export WAZ_STORAGE_ACCESS_KEY=accountkey
 	
 4. Create a new `views` folder with an `index.html` file inside with to display the list of containers retrieved from Azure:
 
