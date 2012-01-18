@@ -5,7 +5,7 @@ Node: v0.6.6
 
 This post explains the basic steps you need to follow to make that your Node Web application starts storing the data in MongoDB Replica Sets, hosted on Windows Azure. For this, we'll use the new [Windows Azure tools for MongoDB and Node.js](), which contains some useful `ps` cmdlets that can (and will) save you a lot of time when developing.
 
-We part from a node web application that uses the [mongodb-native](https://github.com/christkv/node-mongodb-native) driver to access a MongoDB Server, and in the next few lines, we'll add support to connect to Replica Sets stored in Azure. You can download the client from [here](https://github.com/nanovazquez/nodeonazure-blog/blob/master/articles/nodejs-web-app.zip) (run a `npm install` after you extract the code to download the necessary modules).
+We part from a node web application that uses the [mongodb-native](https://github.com/christkv/node-mongodb-native) driver to access a MongoDB Server, and in the next few lines, we'll add support to connect to Replica Sets stored in Azure. You can download the client from [here](https://github.com/nanovazquez/common/movies-app.zip) (run a `npm install` after you extract the code to download the necessary modules).
 
 ##The steps
 
