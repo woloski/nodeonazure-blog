@@ -5,7 +5,7 @@ Node: v0.6.6
 
 This post explains how to use MongoDB Replica Sets from a node.js app, all hosted on Windows Azure. For this, we'll use the new [Windows Azure tools for MongoDB and Node.js](http://downloads.mongodb.org/azure/AzureMongoDeploymentCmdlets.msi), which contains some useful `PowerShell` CmdLets that will save valuable time.
 
-We will also explain how the integration with mongo-node-azure work. If you want to read more about this go to [Getting Started Guide - Node.js with Storage on MongoDB](http://www.interoperabilitybridges.com/Azure/Getting_Started_Guide_Node_with_MongoDB.asp) and the [documentation from 10gen](http://www.mongodb.org/display/DOCS/MongoDB+on+Azure).
+We will also explain how the integration with mongo-node-azure work. 
 
 ## How it works
 
@@ -17,6 +17,8 @@ This is how mongo db works in Azure and node.js:
 * You can scale out to multiple Mongo Replica Sets by increasing the instance count of the Mongo Db role
 * So how the application that will connect to the Mongo replica set will know the IP address of each replica set. The way it works is, there is a [startup task](http://msdn.microsoft.com/en-us/library/windowsazure/hh180155.aspx) that runs a small executable every time a new instance is started in your application. That executable will gather the IP address of each instance running the replica set using `RoleEnviroment.Roles["ReplicaSetRole"].Instances[i].InstanceEndpoints.IPEndpoint` and write it down to a json file in the root folder of the role. Then there will be a module in node.js that will be listen for changes in that file. This module will provide a method to obtain the replica set addresses to use with the mongo driver. On the other hand, if there was an increase or decrease in the instance count the executable will use the `RoleEnvironment.Changed` event and will rewrite the json file with the new info. They had to do all that because it is not possible to access the `RoleEnvironment` API from node yet.   
 * And last but not least, it all works in the emulator
+
+If you want to read more about this go to [Getting Started Guide - Node.js with Storage on MongoDB](http://www.interoperabilitybridges.com/Azure/Getting_Started_Guide_Node_with_MongoDB.asp) and the [documentation from 10gen](http://www.mongodb.org/display/DOCS/MongoDB+on+Azure).
 
 ##How to configure Mongo with Windows Azure
 
