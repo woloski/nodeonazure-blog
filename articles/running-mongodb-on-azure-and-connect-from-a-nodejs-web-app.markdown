@@ -5,7 +5,7 @@ Node: v0.6.6
 
 This post explains how to use MongoDB Replica Sets from a node.js app, all hosted on Windows Azure. For this, we'll use the new [Windows Azure tools for MongoDB and Node.js](http://downloads.mongodb.org/azure/AzureMongoDeploymentCmdlets.msi), which contains some useful `PowerShell` CmdLets that will save valuable time.
 
-We will also explain how the integration with mongo-node-azure work. 
+We will also explain how the integration between mongo-node-azure works. 
 
 ## How it works
 
@@ -22,7 +22,7 @@ If you want to read more about this go to [Getting Started Guide - Node.js with 
 
 ##How to configure Mongo with Windows Azure
 
-The first step is to create the MongoDB role (it is a worker role) that will  run the Replica Sets. Open `Windows PowerShell for MongoDB Node.js` and navigate to the folder where you placed have your azure-node application. Type the following command:
+The first step is to create the MongoDB role (it is a worker role) that will run the Replica Sets. Open `Windows PowerShell for MongoDB Node.js` and navigate to the folder where you have your azure-node application. Type the following command:
 
     Add-AzureMongoWorkerRole ReplicaSetRole 3
 
@@ -54,20 +54,14 @@ Now that we have both roles linked, let's add some code to connect to the replic
       var mongoDbServerConfig = mongoEndpoints.getMongoDBServerConfig();
       self.db = new mongoDb('test', mongoDbServerConfig, {native_parser:false});
       
-      self.db.open(function(err, client) {
-          if (!err){
-              self.fillCollectionIfEmpty(client);
-          }
-          else
-              throw err;
-      });
+      self.db.open(function(){}});
     });
 
     mongoEndpoints.on('error', function(error) {
       throw error;
     });
 
-The mongoEndpoints will listen the running MongoDB Replica Set nodes and will be updated automatically if one of the nodes come on or off line.
+The mongoEndpoints will listen the running MongoDB Replica Set nodes and will be updated automatically if one of the nodes come on or off line (either because the instance count of the replica set role was increased/decreased or because the VM is being patched)
 
 And that's it! You can publish this app to Windows Azure and wait for the instances to start.
 
