@@ -5,13 +5,11 @@ Node: v0.6.6
 
 In this article we will walk you through the implementation of the Windows Azure ACS module for [everyauth](https://github.com/bnoguchi/everyauth).
 
-I would like to thanks my co-workers [@jpgd](http://twitter.com/jpgd) and [@woloski](http://twitter.com/woloski) from [Southworks](http://blogs.southworks.net) because they helped me shape this package.
+### Adding Windows Azure ACS module to everyauth
 
-## Adding Windows Azure ACS module to everyauth
+We forked [everyauth](https://github.com/bnoguchi/everyauth) git repo. Then, created a new module, called `azureacs`, following the design guidelines suggested by [Brian Noguchi](https://github.com/bnoguchi). We did a quick and dirty implementation just to see if the whole flow would work. Once we had it working, we refactored it and created two independent modules: [node-wsfederation](https://github.com/darrenzully/node-wsfederation) and [node-swt](https://github.com/darrenzully/node-swt).
 
-First thing was forking [everyauth](https://github.com/bnoguchi/everyauth) git repo. Then, we created a new module, called `azureacs`, following the design guidelines suggested by [Brian Noguchi](https://github.com/bnoguchi). We did a quick n dirty implementation just to see if the whole flow would work. Once we had it working, we refactored it and created two independent modules: [node-wsfederation](https://github.com/darrenzully/node-wsfederation) and [node-swt](https://github.com/darrenzully/node-swt).
-
-## The token format: parsing and validating SimpleWebTokens with node-swt
+### The token format: parsing and validating SimpleWebTokens with node-swt
 
 SimpleWebTokens are really simple :). Windows Azure ACS can issue SimpleWebTokens as well as SAML 1.1 or 2.0 tokens. We decided to implement SWT because it is a very simple format and it's based on HMAC256 signatures which are ubiquous in every platform. 
 
@@ -40,7 +38,7 @@ The logic basically checks
 3. The audience uri (the target application for this token) matches with the one in the configuration
 4. Finaly calculates the HMAC based on the signing key set on the configuration and compare it with the one in the token
 
-## The protocol: implementing the basic ws-federation protocol with node-wsfederation
+### The protocol: implementing the basic ws-federation protocol with node-wsfederation
 
 Ws-Federation is a very simple protocol. It expects an HTTP GET against the identity provider endpoint and it will produce an HTTP POST against the application with an envelope that contains the token (swt, saml, custom, etc.).
 
@@ -70,7 +68,7 @@ The `getRequestSecurityTokenUrl` will build the url that will be used for the re
 
 The `extractToken` will simply parse the response and extract from the XML the `RequestedSecurityToken` element. Inside that element we will find the token.
 
-## The glue: putting it all together in everyauth
+### The glue: putting it all together in everyauth
 
 [everyauth](https://github.com/bnoguchi/everyauth) uses an interesting model for defining the whole sequenece of steps so that you don't have to nest callbacks inside callbacks. Basically you define the flow like this, and then create each function that will be called.
 
@@ -148,4 +146,8 @@ Here are the most important steps
         return this.breakTo('protocolNotImplementedErrorSteps', this.tokenFormat());
       })
 
-As you can see, these steps are using both [node-swt](https://github.com/darrenzully/node-swt) and [node-wsfederation](https://github.com/darrenzully/node-wsfederation) to do the job.
+## Conclusion
+
+Integrating with everyauth was simple once we understood how it works. Anyway, we created two reusable modules [node-swt](https://github.com/darrenzully/node-swt) and [node-wsfederation](https://github.com/darrenzully/node-wsfederation) that can be used to implement support for [connect-auth](https://github.com/ciaranj/connect-auth) or [passport](https://github.com/jaredhanson/passport). By using the `azureacs` module you will be able to provide single sign on for multiple applications in different domains and platforms and also the ability to integrate with enterprise customers that use ADFS, SiteMinder or any other ws-federation identity provider.
+
+I would like to thanks my co-workers [@jpgd](http://twitter.com/jpgd) and [@woloski](http://twitter.com/woloski) from [Southworks](http://blogs.southworks.net) because they helped  shaping this package.
