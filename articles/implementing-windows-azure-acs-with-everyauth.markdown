@@ -5,7 +5,7 @@ Node: v0.6.6
 
 In this article we will walk you through the implementation of the Windows Azure ACS module for [everyauth](https://github.com/bnoguchi/everyauth).
 
-### Adding Windows Azure ACS module to everyauth
+## Adding Windows Azure ACS module to everyauth
 
 We forked [everyauth](https://github.com/bnoguchi/everyauth) git repo. Then, created a new module, called `azureacs`, following the design guidelines suggested by [Brian Noguchi](https://github.com/bnoguchi). We did a quick and dirty implementation just to see if the whole flow would work. Once we had it working, we refactored it and created two independent modules: [node-wsfederation](https://github.com/darrenzully/node-wsfederation) and [node-swt](https://github.com/darrenzully/node-swt).
 
