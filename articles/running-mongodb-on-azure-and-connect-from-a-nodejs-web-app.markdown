@@ -3,11 +3,9 @@ Author: Mariano Vazquez
 Date: Wed Jan 18 2012 18:00:00 GMT-0300
 Node: v0.6.6
 
-This post explains the basic steps you need to follow to make that your Node Web application starts storing the data in MongoDB Replica Sets, hosted on Windows Azure. For this, we'll use the new [Windows Azure tools for MongoDB and Node.js](), which contains some useful `PowerShell` CmdLets thatwill save you valuable time.
+This post explains how to use MongoDB Replica Sets from a node.js app, all hosted on Windows Azure. For this, we'll use the new [Windows Azure tools for MongoDB and Node.js](http://downloads.mongodb.org/azure/AzureMongoDeploymentCmdlets.msi), which contains some useful `PowerShell` CmdLets that will save valuable time.
 
-We start from a node web application that uses the [mongodb-native](https://github.com/christkv/node-mongodb-native) driver to access a MongoDB Server. We'll add support to connect to Replica Sets running on Windows Azure. 
-
-If you want to read more about the integration between Windows Azure and Mongo Db read the [Getting Started Guide - Node.js with Storage on MongoDB](http://www.interoperabilitybridges.com/Azure/Getting_Started_Guide_Node_with_MongoDB.asp) and the [documentation from 10gen](http://www.mongodb.org/display/DOCS/MongoDB+on+Azure).
+We will also explain how the integration with mongo-node-azure work. If you want to read more about this go to [Getting Started Guide - Node.js with Storage on MongoDB](http://www.interoperabilitybridges.com/Azure/Getting_Started_Guide_Node_with_MongoDB.asp) and the [documentation from 10gen](http://www.mongodb.org/display/DOCS/MongoDB+on+Azure).
 
 ## How it works
 
