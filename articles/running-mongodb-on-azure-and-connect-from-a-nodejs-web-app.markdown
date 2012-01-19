@@ -3,29 +3,42 @@ Author: Mariano Vazquez
 Date: Wed Jan 18 2012 18:00:00 GMT-0300
 Node: v0.6.6
 
-This post explains the basic steps you need to follow to make that your Node Web application starts storing the data in MongoDB Replica Sets, hosted on Windows Azure. For this, we'll use the new [Windows Azure tools for MongoDB and Node.js](), which contains some useful `ps` cmdlets that can (and will) save you a lot of time when developing.
+This post explains the basic steps you need to follow to make that your Node Web application starts storing the data in MongoDB Replica Sets, hosted on Windows Azure. For this, we'll use the new [Windows Azure tools for MongoDB and Node.js](), which contains some useful `PowerShell` CmdLets thatwill save you valuable time.
 
-We part from a node web application that uses the [mongodb-native](https://github.com/christkv/node-mongodb-native) driver to access a MongoDB Server, and in the next few lines, we'll add support to connect to Replica Sets stored in Azure. You can download the client from [here](https://github.com/nanovazquez/common/movies-app.zip) (run a `npm install` after you extract the code to download the necessary modules).
+We start from a node web application that uses the [mongodb-native](https://github.com/christkv/node-mongodb-native) driver to access a MongoDB Server. We'll add support to connect to Replica Sets running on Windows Azure. 
 
-##The steps
+If you want to read more about the integration between Windows Azure and Mongo Db read the [Getting Started Guide - Node.js with Storage on MongoDB](http://www.interoperabilitybridges.com/Azure/Getting_Started_Guide_Node_with_MongoDB.asp) and the [documentation from 10gen](http://www.mongodb.org/display/DOCS/MongoDB+on+Azure).
 
-First, you will need to create the MongoDB role that will take care of manage the Replica Sets. Each instance of this role will manage a Replica Set Node that stores data in a [Windows Azure Drive](https://www.windowsazure.com/en-us/develop/net/fundamentals/cloud-storage/#drives). Open the **Windows PowerShell for MongoDB Node.js** window from the **Start Menu**, navigate to the folder where you placed the **nodejs-web-app** and type the following command:
+## How it works
+
+This is how mongo db works in Azure and node.js:
+
+* MongoDb will run the native binaries on a worker role and will store the data in Windows Azure storage using [Windows Azure Drive](https://www.windowsazure.com/en-us/develop/net/fundamentals/cloud-storage/#drives) (basically a hard disk mounted on Azure Page blobs)
+* The good thing about using Azure Storage is that the data is [georeplicated](http://blogs.msdn.com/b/windowsazurestorage/archive/2011/09/15/introducing-geo-replication-for-windows-azure-storage.aspx). It will also make backup easier because of the snapshot feature of blob storage (which is not a copy but a diff).
+* It will use the local hard disk in the VM (local resources in the Azure jargon) to store the log files and a local cache.
+* You can scale out to multiple Mongo Replica Sets by increasing the instance count of the Mongo Db role
+* So how the application that will connect to the Mongo replica set will know the IP address of each replica set. The way it works is, there is a [startup task](http://msdn.microsoft.com/en-us/library/windowsazure/hh180155.aspx) that runs a small executable every time a new instance is started in your application. That executable will gather the IP address of each instance running the replica set using `RoleEnviroment.Roles["ReplicaSetRole"].Instances[i].InstanceEndpoints.IPEndpoint` and write it down to a json file in the root folder of the role. Then there will be a module in node.js that will be listen for changes in that file. This module will provide a method to obtain the replica set addresses to use with the mongo driver. On the other hand, if there was an increase or decrease in the instance count the executable will use the `RoleEnvironment.Changed` event and will rewrite the json file with the new info. They had to do all that because it is not possible to access the `RoleEnvironment` API from node yet.   
+* And last but not least, it all works in the emulator
+
+##How to configure Mongo with Windows Azure
+
+The first step is to create the MongoDB role (it is a worker role) that will  run the Replica Sets. Open `Windows PowerShell for MongoDB Node.js` and navigate to the folder where you placed have your azure-node application. Type the following command:
 
     Add-AzureMongoWorkerRole ReplicaSetRole 3
 
-This will create a worker role named **ReplicaSetRole** with 3 role instances, but you can use the amount you want (is recommended to use more than 2, 1 instance is the equivalent to a stand-alone server)
+This will create a worker role named **ReplicaSetRole** with 3 instances. You can use the amount you want but in production is recommended to use at least 3 for failover, 1 instance is the equivalent to a stand-alone server.
 
-Next, we will connect both Client and Server roles, using the next command:
+Next, we will link both the node app (in this case `sample-web`) and the mongo roles, using the following command:
 
     Join-AzureNodeRoleToMongoRole sample-web ReplicaSetRole
 
-This is what the cmdlet does to the web role:
+This is what the CmdLet will do:
 
-* Adds two [configuration settings](http://msdn.microsoft.com/en-us/library/windowsazure/ee758710.aspx#ConfigurationSettings) named RoleName & EndpointName. These settings will be used to connect to the Replica Sets. 
-* Adds a startup task that launches the AzureEndpointsAgent.exe.
-* Installs the **AzureEndpoints** module.
+* Add two [configuration settings](http://msdn.microsoft.com/en-us/library/windowsazure/ee758710.aspx#ConfigurationSettings) named RoleName & EndpointName.  
+* Add a startup task that launches the AzureEndpointsAgent.exe that do all the work we described in the first section.
+* Install the **azureEndpoints** module (that will read the json file and provide the replcia set info).
 
-Now that we have both roles connected, let's add some code. We've already included the mongodb driver's code because what changes is how the client the client connects to the Replica Set Server, the rest is handled as usual. Open to the **moviesProvider.js** file, and add the following code inside the MoviesProvider constructor:
+Now that we have both roles linked, let's add some code to connect to the replica set.
 
     // Create mongodb azure endpoint
     // TODO: Replace 'ReplicaSetRole' with your MongoDB role name (ReplicaSetRole is the default)
@@ -56,8 +69,9 @@ Now that we have both roles connected, let's add some code. We've already includ
 
 The mongoEndpoints will listen the running MongoDB Replica Set nodes and will be updated automatically if one of the nodes come on or off line.
 
+And that's it! You can publish this app to Windows Azure and wait for the instances to start.
 
-And that's it! You can now test the application if you want (by the way, is a movie repository if you don't figure it out yet)
+You can download the node example app from [here](https://github.com/nanovazquez/common/movies-app.zip) (run `npm install` after you extract the code to download the necessary modules).
 
 ![](/running-mongodb-on-azure-and-connect-from-a-nodejs-web-app/movies-app.png)
 
