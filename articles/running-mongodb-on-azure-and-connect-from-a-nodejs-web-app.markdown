@@ -65,7 +65,7 @@ The mongoEndpoints will listen the running MongoDB Replica Set nodes and will be
 
 And that's it! You can publish this app to Windows Azure and wait for the instances to start.
 
-You can download the node example app from [here](https://github.com/nanovazquez/common/movies-app.zip) (run `npm install` after you extract the code to download the necessary modules).
+You can browse the node example app from [here](https://github.com/nanovazquez/common/tree/master/movies-app) (run `npm install` after you extract the code to download the necessary modules).
 
 ![](/running-mongodb-on-azure-and-connect-from-a-nodejs-web-app/movies-app.png)
 
