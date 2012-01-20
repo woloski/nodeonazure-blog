@@ -18,9 +18,13 @@ This is how mongo db works in Azure and node.js:
 * So how the application that will connect to the Mongo replica set will know the IP address of each replica set. The way it works is, there is a [startup task](http://msdn.microsoft.com/en-us/library/windowsazure/hh180155.aspx) that runs a small executable every time a new instance is started in your application. That executable will gather the IP address of each instance running the replica set using `RoleEnviroment.Roles["ReplicaSetRole"].Instances[i].InstanceEndpoints.IPEndpoint` and write it down to a json file in the root folder of the role. Then there will be a module in node.js that will be listen for changes in that file. This module will provide a method to obtain the replica set addresses to use with the mongo driver. On the other hand, if there was an increase or decrease in the instance count the executable will use the `RoleEnvironment.Changed` event and will rewrite the json file with the new info. They had to do all that because it is not possible to access the `RoleEnvironment` API from node yet.   
 * And last but not least, it all works in the emulator
 
-If you want to read more about this go to [Getting Started Guide - Node.js with Storage on MongoDB](http://www.interoperabilitybridges.com/Azure/Getting_Started_Guide_Node_with_MongoDB.asp) and the [documentation from 10gen](http://www.mongodb.org/display/DOCS/MongoDB+on+Azure).
+If you want to read more about this go to [Getting Started Guide - Node.js with Storage on MongoDB](https://www.windowsazure.com/en-us/develop/nodejs/tutorials/mongodb-database/) and the [documentation from 10gen](http://www.mongodb.org/display/DOCS/MongoDB+on+Azure).
 
 ##How to configure Mongo with Windows Azure
+
+You must download the MongoDB binaries as a separate package, in addition to installing the Windows Azure Tools for MongoDB and Node.js. This is to ensure that you always get the latest mongo binaries.
+
+    Get-AzureMongoDBBinaries
 
 The first step is to create the MongoDB role (it is a worker role) that will run the Replica Sets. Open `Windows PowerShell for MongoDB Node.js` and navigate to the folder where you have your azure-node application. Type the following command:
 
