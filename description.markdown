@@ -6,6 +6,8 @@ This site is powered by [Wheat][], a git based blogging engine written in [node.
 
 The content for this site is stored in a [git repository][] and we would love to see contributions.
 
+Subscribe to the feed ([RSS](/feed.xml)).
+
 [Windows Azure]: http://www.windowsazure.com/
 [node.js]: http://nodejs.org/
 [Wheat]: http://github.com/creationix/wheat
