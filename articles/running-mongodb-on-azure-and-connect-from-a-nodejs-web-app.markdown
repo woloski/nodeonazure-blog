@@ -22,11 +22,13 @@ If you want to read more about this go to [Getting Started Guide - Node.js with 
 
 ##How to configure Mongo with Windows Azure
 
-You must download the MongoDB binaries as a separate package, in addition to installing the Windows Azure Tools for MongoDB and Node.js. This is to ensure that you always get the latest mongo binaries.
+Open `Windows PowerShell for MongoDB Node.js`. First thing will be to download the MongoDB binaries as a separate package, in addition to installing the Windows Azure Tools for MongoDB and Node.js. This is needed because mongo tools MSI does not contain mongodb binaries (due to licensing differences). So this command has to be executed once to download MongoDB binaries to the folder "C:\Program Files (x86)\MongoDB\Windows Azure\Nodejs\Scaffolding\MongoDB\WorkerRole\MongoDBBinaries".
+ 
+When you execute `Add-AzureMongoWorkerRole` command it will copy mongodb binaries from above folder to the worker role created.
 
     Get-AzureMongoDBBinaries
 
-The first step is to create the MongoDB role (it is a worker role) that will run the Replica Sets. Open `Windows PowerShell for MongoDB Node.js` and navigate to the folder where you have your azure-node application. Type the following command:
+Now let's add the mongo worker role that will run the replica set.
 
     Add-AzureMongoWorkerRole ReplicaSetRole 3
 
