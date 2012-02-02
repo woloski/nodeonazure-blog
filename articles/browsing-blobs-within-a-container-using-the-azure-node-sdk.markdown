@@ -50,8 +50,8 @@ There's nothing wrong with the code above, and it might be sufficient for you an
 
 ## Using directories approach
 
-You can filter the results of the **listBlob** operation by setting the **prefix** and **delimiter** parameters. The first one is used, as its name claims, to return only the blobs whose names begin with the value specified. The delimiter has two purposes: to skip from the result those blobs whose names contains the delimiter and to include a **BlobPrefix** element in the [REST API](http://msdn.microsoft.com/en-us/library/windowsazure/dd135734.aspx) response body. 
-This element will act as a placeholder for all blobs whose names begin with the same substring up to the appearance of the delimiter, and will be used to simulate a directory hierarchy (we can recover the folders from there).
+You can filter the results of the **listBlob** operation by setting the **prefix** and **delimiter** parameters. The first one is used, as its name claims, to return only the blobs whose names begin with the value specified. The delimiter has two purposes: to skip from the result those blobs whose names contains the delimiter, and to include a **BlobPrefix** element in the [REST API](http://msdn.microsoft.com/en-us/library/windowsazure/dd135734.aspx) response body. 
+This element will act as a placeholder for all blobs whose names begin with the same substring up to the appearance of the delimiter, and will be used to simulate a directory hierarchy (the folders will be listed there).
 
 
 	var azure  = require('azure');
