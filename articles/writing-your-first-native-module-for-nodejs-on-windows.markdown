@@ -62,142 +62,141 @@ Note: that the cpp file that we add has to be /CLR.
 *Nitpicker corner: Don't get overwhelmed!*
 I wrote some comments in the source to explain the different pieces:
 
-{% highlight c++ %}
-#pragma comment(lib, "node")
+**EventLog.cpp**
+	#pragma comment(lib, "node")
 
-#using <mscorlib.dll>
-#using <system.dll>
+	#using <mscorlib.dll>
+	#using <system.dll>
 
-#include <node.h>
-#include <v8.h>
-#include <string>
-#include <gcroot.h>
-#include <string>
-#include <iostream>
-#include <uv.h>
+	#include <node.h>
+	#include <v8.h>
+	#include <string>
+	#include <gcroot.h>
+	#include <string>
+	#include <iostream>
+	#include <uv.h>
 
-using namespace node;
-using namespace v8;
+	using namespace node;
+	using namespace v8;
 
-class EventLog : ObjectWrap
-{
-private:
-    //the field that will hold an instance of System.Diagnostics.EventLog
-    gcroot<System::Diagnostics::EventLog^> _eventLog;
+	class EventLog : ObjectWrap
+	{
+	private:
+		//the field that will hold an instance of System.Diagnostics.EventLog
+		gcroot<System::Diagnostics::EventLog^> _eventLog;
 
-public:
-    
-    static Persistent<FunctionTemplate> s_ct;
-    
-    //module initialization
-    static void NODE_EXTERN Init(Handle<Object> target)
-    {
-        HandleScope scope;
+	public:
+		
+		static Persistent<FunctionTemplate> s_ct;
+		
+		//module initialization
+		static void NODE_EXTERN Init(Handle<Object> target)
+		{
+			HandleScope scope;
 
-        // set the constructor function
-        Local<FunctionTemplate> t = FunctionTemplate::New(New);
+			// set the constructor function
+			Local<FunctionTemplate> t = FunctionTemplate::New(New);
 
-        // set the node.js/v8 class name
-        s_ct = Persistent<FunctionTemplate>::New(t);
-        s_ct->InstanceTemplate()->SetInternalFieldCount(1);
-        s_ct->SetClassName(String::NewSymbol("EventLog"));
+			// set the node.js/v8 class name
+			s_ct = Persistent<FunctionTemplate>::New(t);
+			s_ct->InstanceTemplate()->SetInternalFieldCount(1);
+			s_ct->SetClassName(String::NewSymbol("EventLog"));
 
-        // registers a class member functions 
-        NODE_SET_PROTOTYPE_METHOD(s_ct, "log", Log);
-        
-        target->Set(String::NewSymbol("EventLog"),
-            s_ct->GetFunction());
-    }
-    
-    //Constructor
-    //Source: the name of the event log we will use
-    //LogName: the logName could be Application, System, or a new one.
-    EventLog(System::String^ source, System::String^ logName) 
-    {
-        if(!System::Diagnostics::EventLog::SourceExists(source)){
-            System::Diagnostics::EventLog::CreateEventSource(source, logName);
-        }
-        
-        _eventLog = gcnew System::Diagnostics::EventLog();
-        _eventLog->Source = source;
-    }
+			// registers a class member functions 
+			NODE_SET_PROTOTYPE_METHOD(s_ct, "log", Log);
+			
+			target->Set(String::NewSymbol("EventLog"),
+				s_ct->GetFunction());
+		}
+		
+		//Constructor
+		//Source: the name of the event log we will use
+		//LogName: the logName could be Application, System, or a new one.
+		EventLog(System::String^ source, System::String^ logName) 
+		{
+			if(!System::Diagnostics::EventLog::SourceExists(source)){
+				System::Diagnostics::EventLog::CreateEventSource(source, logName);
+			}
+			
+			_eventLog = gcnew System::Diagnostics::EventLog();
+			_eventLog->Source = source;
+		}
 
-    //finalizer, kill the _eventLog.
-    //This will call the IDisposable
-    ~EventLog()
-    {
-        delete _eventLog;
-    }
+		//finalizer, kill the _eventLog.
+		//This will call the IDisposable
+		~EventLog()
+		{
+			delete _eventLog;
+		}
 
-    //Transform a v8 argument to a .Net String
-    static inline gcroot<System::String^> ParseArgument(Arguments const&args, int argumentIndex)
-    {
-        Local<String> message = Local<String>::Cast(args[argumentIndex]);
-        gcroot<System::String^> m = gcnew System::String(((std::string)*v8::String::AsciiValue(message)).c_str());
-        return m;
-    }
+		//Transform a v8 argument to a .Net String
+		static inline gcroot<System::String^> ParseArgument(Arguments const&args, int argumentIndex)
+		{
+			Local<String> message = Local<String>::Cast(args[argumentIndex]);
+			gcroot<System::String^> m = gcnew System::String(((std::string)*v8::String::AsciiValue(message)).c_str());
+			return m;
+		}
 
-    //This is the method that call node will call when we do *new EventLog(...)*
-    //Note that it looks as a Javascript func since it returns "this"
-    static Handle<Value> New(const Arguments& args)
-    {
-        HandleScope scope;
+		//This is the method that call node will call when we do *new EventLog(...)*
+		//Note that it looks as a Javascript func since it returns "this"
+		static Handle<Value> New(const Arguments& args)
+		{
+			HandleScope scope;
 
-        if (!args[0]->IsString()) {
-            return ThrowException(Exception::TypeError(
-                String::New("First argument must be the name of the event log source")));
-        }
-        if (!args[1]->IsString()) {
-            return ThrowException(Exception::TypeError(
-                String::New("Second argument must be the name of the event log: (Application, System)")));
-        }
+			if (!args[0]->IsString()) {
+				return ThrowException(Exception::TypeError(
+					String::New("First argument must be the name of the event log source")));
+			}
+			if (!args[1]->IsString()) {
+				return ThrowException(Exception::TypeError(
+					String::New("Second argument must be the name of the event log: (Application, System)")));
+			}
 
-        System::String^ s = ParseArgument(args, 0);
-        System::String^ ln = ParseArgument(args, 1);
+			System::String^ s = ParseArgument(args, 0);
+			System::String^ ln = ParseArgument(args, 1);
 
-        EventLog* pm = new EventLog(s, ln);
+			EventLog* pm = new EventLog(s, ln);
 
-        pm->Wrap(args.This());
-        return args.This();
-    }
+			pm->Wrap(args.This());
+			return args.This();
+		}
 
-    //The log method that node will call.
-    //It unwraps the c++ object and call WriteEntry in the _eventLog field
-    static Handle<Value> Log(const Arguments& args)
-    {
-        if (!args[0]->IsString()) {
-            return ThrowException(Exception::TypeError(
-                String::New("First argument must be the message to log.")));
-        }
-        
-        if (!args[1]->IsString()) {
-            return ThrowException(Exception::TypeError(
-                String::New("Second argument must be the type of the entry Information/Warning/Error.")));
-        }
+		//The log method that node will call.
+		//It unwraps the c++ object and call WriteEntry in the _eventLog field
+		static Handle<Value> Log(const Arguments& args)
+		{
+			if (!args[0]->IsString()) {
+				return ThrowException(Exception::TypeError(
+					String::New("First argument must be the message to log.")));
+			}
+			
+			if (!args[1]->IsString()) {
+				return ThrowException(Exception::TypeError(
+					String::New("Second argument must be the type of the entry Information/Warning/Error.")));
+			}
 
-        gcroot<System::String^> m = ParseArgument(args, 0);
-        gcroot<System::String^> t = ParseArgument(args, 1);
-        gcroot<System::Diagnostics::EventLogEntryType> logt = (System::Diagnostics::EventLogEntryType)System::Enum::Parse(System::Diagnostics::EventLogEntryType::typeid, t);
+			gcroot<System::String^> m = ParseArgument(args, 0);
+			gcroot<System::String^> t = ParseArgument(args, 1);
+			gcroot<System::Diagnostics::EventLogEntryType> logt = (System::Diagnostics::EventLogEntryType)System::Enum::Parse(System::Diagnostics::EventLogEntryType::typeid, t);
 
-        //unwrap the instance! that's crazy
-        EventLog* xthis = ObjectWrap::Unwrap<EventLog>(args.This());
+			//unwrap the instance! that's crazy
+			EventLog* xthis = ObjectWrap::Unwrap<EventLog>(args.This());
 
-        xthis->_eventLog->WriteEntry(m, logt, 1000);
+			xthis->_eventLog->WriteEntry(m, logt, 1000);
 
-        return Undefined();
-    }
-};
+			return Undefined();
+		}
+	};
 
-Persistent<FunctionTemplate> EventLog::s_ct;
+	Persistent<FunctionTemplate> EventLog::s_ct;
 
-extern "C" {
-    void NODE_EXTERN init (Handle<Object> target)
-    {
-        EventLog::Init(target);
-    }
-    NODE_MODULE(sharp, init);
-}
-{% endhighlight %}
+	extern "C" {
+		void NODE_EXTERN init (Handle<Object> target)
+		{
+			EventLog::Init(target);
+		}
+		NODE_MODULE(sharp, init);
+	}
 
 Some interesting things about this:
 
