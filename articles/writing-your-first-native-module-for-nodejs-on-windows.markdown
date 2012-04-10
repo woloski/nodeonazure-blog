@@ -237,8 +237,13 @@ Then you can set breakpoints and this will happen:
 
 As you can see here we are executing the eventLog.WriteLog method in the same thread. An standard for this is to open a new thread using "uv". I will explain this in another article later.   
 
+## Credits 
+ 
+ * I have used this guide [[4]example](https://github.com/saary/node.net) from Saar Yahalom as starting point. 
+
 ## References
 
  * [[1] Windows Event Log Js](https://github.com/jfromaniello/windowseventlogjs)
  * [[2] System.Diagnostic.EventLog](http://msdn.microsoft.com/en-us/library/system.diagnostics.eventlog.aspx)
  * [[3] Node.js source code](http://nodejs.org/#download)
+ * [[4] Saar Yahalom article](https://github.com/saary/node.net/)
