@@ -3,23 +3,22 @@ Author: Jose Romaniello
 Date: Tue Apr 10 2012 11:42:35 GMT-0300
 Node: v0.6.6
 
-
 In this article I will guide you on how to write a native module for node.js in Windows using Visual Studio.
 
-# About the example
+## About the example
 
 In this example we are going to build a module to log events to the Windows Event Log. The project is already published in [[1] github](https://github.com/jfromaniello/windowseventlogjs) and you can install it with npm.
 
-# I like it, but why native?
+## I like it, but why native?
 
 There are several reasons why you would build a native extension for node.js, but for me the most important reason is when you want to use an API that doesn't have an open or well documented protocol and the vendor only provides a native library. Of course it can also happen that the protocol is well documented and open but it was easier to interface the native implementation than writing a javascript client from scratch (E.g. the mongodb package).
 In this case we are talking about the Windows Event Log which is a component of the operative system.
 
-# I don't speak c++ 
+## I don't speak c++ 
 
 The code that I am going to show well... it might have several problems. The thing is that my c++ skills are close to my English skills. I can read it and I can write it but as Russ Olsen say (for ruby) I have not absorb the "c++ way" of thinking and problem solving. So, *please* if you think that something could be improved just tell me.
 
-# C++/CLI
+## C++/CLI
 
 C++/CLI is a Microsoft's evolution of the c++ language invented by Bjarne Stroustrup. The name is a tuple "C++" and "CLI", CLI means "Command Language Infrastructure" which is the specification for the .Net framework. So, you can think of c++/cli as:
 
@@ -27,42 +26,43 @@ C++/CLI is a Microsoft's evolution of the c++ language invented by Bjarne Strous
  * Interoperability between the c++ model and the .net framework 
 In this examples I will use the .Net class [[2]System.Diagnostic.EventLog](http://msdn.microsoft.com/en-us/library/system.diagnostics.eventlog.aspx). 
 
-# Configuring the environment 
+## Configuring the environment 
 
 The first thing you will need to do is to download the  [[3]Node.js source code](http://nodejs.org/#download) and uncompress it somewhere in your disk.
 Then you will have to build the source code by running the vcbuild.bat file.
 Note: the build process needs python 2.x installed and it should be accesible from the path.
 
-# Creating the project in Visual Studio
+## Creating the project in Visual Studio
 
-1-Create a new "CLR Empty Project":
+1- Create a new "CLR Empty Project":
 
-![2012-04-10_0953.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_0953.png)
+<img src="http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_0953.png" width="800" />
 
-2-Do these changes to the project settings:
+2- Do these changes to the project settings:
 
-![2012-04-10_0956.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_0956.png)
+<img src="http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_0956.png" width="800" />
 
-3-Add these directories to the Include Directories (remember to change C:\node-v0.6.14\ with the path where you have the node.js sources)
+3- Add these directories to the Include Directories (remember to change C:\node-v0.6.14\ with the path where you have the node.js sources)
 
-![2012-04-10_1003.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1003.png)
+<img src="http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1003.png" width="800" />
 
-4-Change the Libraries Directories as follows:
+4. Change the Libraries Directories as follows:
 
 ![2012-04-10_1008.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1008.png)
 
-5-Add a new "C++ File (.cpp)" called "EventLog", so your solution has to look as:
+5- Add a new "C++ File (.cpp)" called "EventLog", so your solution has to look as:
 
 ![2012-04-10_1043.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1043.png)
 
 Note: that the cpp file that we add has to be /CLR. 
 
-# Show me the code
+## Show me the code
 
 *Nitpicker corner: Don't get overwhelmed!*
 I wrote some comments in the source to explain the different pieces:
 
 **EventLog.cpp**
+
 	#pragma comment(lib, "node")
 
 	#using <mscorlib.dll>
@@ -206,13 +206,13 @@ Some interesting things about this:
  * Arguments args; is like the javascript "arguments" kind-of-array that you have in every javascript function
  * convert v8 javascript values to c++ values, then convert it to .net values. For instance the strings  
 
-# Testing the module
+## Testing the module
 
 When you generate this project, you will have a "debug" folder *at the same level than the solution* (note that is not the debug folder of the project folder).
 There is one important file there, the ".node" file which is a dll than node can talk to.
 Now, if you can open a command line prompt and try the stuff with the node [[4]REPL](http://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop), but remember that in order to write to the event log you need an elevated prompt, otherwise will happen this:
 
-![2012-04-10_1212.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1212.png)
+<img src="http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1212.png" width="800" />
 So, you run cmd.exe as an administrator, go to the solution folder \debug and do this:
 
 ![2012-04-10_1216.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1216.png)
@@ -222,22 +222,22 @@ Then if you open the event log you will see this:
 ![2012-04-10_1219.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1219.png)
 
 
-# Debugging
+## Debugging
 
 You can debug your module from visual studio (that's crazy). First you need to be running Visual Studio as an admin, this is not always, it is because we are running the node's REPL as an admin in order to write to the event log.
 Once you have done the "require" call in the node REPL, go to the Debug menu of Visual Studio and then "Attach to Process" and look at the node process:
 
-![2012-04-10_1224.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1224.png)
+<img src="http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1224.png" width="800" />
 
 Then you can set breakpoints and this will happen:
 
-![2012-04-10_1230.png](http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1230.png)
+<img src="http://joseoncodecom.ipage.com/wp-content/uploads/images/2012-04-10_1230.png" width="800" />
 
-# TODOs
+## TODOs
 
 As you can see here we are executing the eventLog.WriteLog method in the same thread. An standard for this is to open a new thread using "uv". I will explain this in another article later.   
 
-# References
+## References
 
  * [[1] Windows Event Log Js](https://github.com/jfromaniello/windowseventlogjs)
  * [[2] System.Diagnostic.EventLog](http://msdn.microsoft.com/en-us/library/system.diagnostics.eventlog.aspx)

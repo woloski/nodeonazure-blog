@@ -1,0 +1,25 @@
+Title: Creating a collaborative realtime mardown editor or Google Docs for Markdown
+Author: Matias Woloski
+Date: Thu Mar 18 2012 9:00:00 GMT-0800
+Node: v0.6.6
+
+Markdown is getting a lot of traction in the development community. For instance, I am using it to edit the articles of this blog, to edit the README on github, to write documentation, in a CMS, in a wiki, in a jekill-based site, etc. We like it because of its lightweight nature that makes you focus on the content instead of the form.
+
+## Finding the right package
+
+Couple of months ago I thought it would be cool to have something like Google Docs for Markdown-based documents that would allow us to:
+
+* Write things collaboratively (like a specification, design doc, meeting minute, etc.)
+* Have instant feedback on the markdown you are writing
+* Allow importing/exporting the content to somewhere (i.e.: Azure blob storage, Amazon S3, GitHub)
+
+I've found [etherpad](https://github.com/ether/pad) which looks really cool but it was too heavyweight. Looking for an alternative that runs on node.js I've found [etherpad-lite](https://github.com/pita/etherpad-lite). It looked promising but I've found it more like "add etherpad to your website" rather than a "building block to create realtime editors". Keep looking and found [share.js](http://sharejs.org). This was more inline with what I wanted. The demo on its homepage brought me in: a collaborative realtime textarea editing :)
+
+![](http://markdownr.blob.core.windows.net/images/4740232956.png)
+
+How it works from [share.js](http://sharejs.org) website:
+
+> As you edit the text area at the top of this page, ShareJS generates operations. Operations are like mini commits to the document. (Eg, `insert:'hi'`, `position:50`.)
+> Like subversion, the server has a version number. If multiple users submit an operation at the same version, one of the edits is applied directly and the other user’s edit is automatically transformed by the server and then applied. Transforming is a bit like a git rebase operation.
+> In your browser, your edits are visible immediately. Edits from other people get transformed on top of yours. Unlike normal SCM systems, the algorithm is very careful to make sure that everyone ends up with the same document, no matter what order the operations are actually applied in. This allows the whole update & commit stuff to happen completely automatically, in realtime. There are no conflict markers or any of that jazz.
+
