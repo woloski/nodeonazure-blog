@@ -38,7 +38,7 @@ git commit -m "new applications"
 git push
 ```
 
-Your apps are available within seconds at http://<your_git_azure_service_name>.cloudapp.net/hello1 and http://<your_git_azure_service_name>.cloudapp.net/hello2, respectively. 
+Your apps are available within seconds at ```http://<your_git_azure_service_name>.cloudapp.net/hello1``` and ```http://<your_git_azure_service_name>.cloudapp.net/hello2```, respectively. 
 
 The git-azure tool and runtime come with support for URL path as well as host name routing, WebSockets, SSL for HTTP and WebSockets (including custom certificates for each host name using Server Name Identification), and full RDP access to the Windows Azure VM for diagnostics and monitoring. Going forward, I plan to add support for accessing live logs in real time from the client, SSH access to Windows Azure VM, and support for multi-instance Azure deployments. 
 
