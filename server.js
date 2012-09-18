@@ -10,7 +10,7 @@ var gitRepoPath = process.env.gitrepoblogpath || __dirname;
 	
 Http.createServer(Stack(
   Creationix.log(),
-  handleGitHook,
+  //handleGitHook,
   require('wheat')(gitRepoPath)
   )).listen(port);
 
