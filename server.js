@@ -4,6 +4,9 @@ var Stack = require('stack'),
     Http = require('http'),
     ChildProcess = require('child_process');
 
+process.on('uncaughtException', function(err) {
+  console.log(err);
+});
 
 var port = process.env.port || 1337;
 var gitRepoPath = process.env.gitrepoblogpath || __dirname;
