@@ -14,7 +14,7 @@
   "dependencies": {
     "stack": "*",
     "creationix": "*",
-    "wheat": "*",
+    "wheat": "=0.2.6",
     "cluster": "*"
   },
   "devDependencies": {}
