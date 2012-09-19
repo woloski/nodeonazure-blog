@@ -1,13 +1,12 @@
-# nodeblog.cloudapp.net
+# nodeblog.azurewebsites.net
 
 This is a community supported blog about how to program in nodejs on top of Windows AZure.
 
 This is powered by a new static blog engine written in node called [wheat][].
 
-To run a local version of the blog, simply install [wheat][] and it's dependencies, and the [Windows Azure SDK for Node.js][]. (TBD)
+To run a local version of the blog, simply clone the repo and run `npm install`
 
 [wheat]: http://github.com/creationix/wheat
-[Windows Azure SDK for Node.js]: http://www.microsoft.com/web/gallery/install.aspx?appid=azurenodepowershell&clcid=0x409
 
 ## Contributing
 
