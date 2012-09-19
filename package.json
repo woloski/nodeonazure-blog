@@ -12,10 +12,10 @@
     "node": "=0.6.20"
   },
   "dependencies": {
-    "stack": "*",
-    "creationix": "*",
-    "wheat": "=0.2.6",
-    "cluster": "*"
+    "stack": "=0.1.0",
+    "creationix": "=0.3.1",
+    "wheat": "https://github.com/qraftlabs/wheat/tarball/master",
+    "cluster": "=0.7.7"
   },
   "devDependencies": {}
 }
